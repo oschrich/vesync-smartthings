@@ -98,10 +98,20 @@ def installed() {
     initialize()
 }
 
-def doAction(String action) {
-    log.trace "Action: ${action}"
+def doActionOld(String action) {
+    log.trace "Action (old): ${action}"
     
     webPut("/v1/" + device.currentValue("device_type") + "/" + device.currentValue("device_id") + "/status/" + action)
+}
+
+def doAction15A(String action) {
+    log.trace "Action (15A): ${action}"
+    
+    def uuid = "28ae62dd-593b-42c3-b59a-4003b979bdf1"
+
+    def body = '{"timeZone": "America/New_York","acceptLanguage": "en","accountID": "' + parent.state.accountId + '","token": "' + parent.state.token + '","uuid": "' + uuid + '","status": "' + action + '"}'
+
+    jsonPut("/15a/v1/device/devicestatus")
 }
 
 private initialize() {
@@ -140,6 +150,12 @@ private webPut(path) {
     return parent.webPut(path)
 }
 
+private jsonPut(path, bodyMap) {
+
+    return parent.jsonPut(path, bodyMap)
+}
+
+
 def refresh() {
     log.trace "refresh"
 
@@ -176,12 +192,22 @@ def ping() {
 
 def on() {
     sendEvent(name: "switch", value: "on") 
-    return doAction("on")
+    if(device.currentValue("device_type") == "ESW15-USA" ) {
+        return doAction15A("on")
+    }
+    else {
+        return doActionOld("on")
+    }
 }
 
 def off() {
     sendEvent(name: "switch", value: "off") 
-    return doAction("off")
+    if(device.currentValue("device_type") == "ESW15-USA" ) {
+        return doAction15A("off")
+    }
+    else {
+        return doActionOld("off")
+    }
 }
 
 private delayAction(long time) {
