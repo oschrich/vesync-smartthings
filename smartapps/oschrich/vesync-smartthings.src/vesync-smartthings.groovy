@@ -38,7 +38,7 @@ import groovy.json.JsonSlurper
 import groovy.json.JsonOutput
 import groovy.transform.Field
 definition(
-    name: "VeSync+SmartThings Connector",
+    name: "VeSync SmartThings",
     namespace: "oschrich",
     author: "oschrich",
     description: "Allows you to integrate your VeSync devices with SmartThings.",
