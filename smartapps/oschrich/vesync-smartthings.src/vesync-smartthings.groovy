@@ -233,7 +233,7 @@ def addDeviceConfirm(params){
     def dni = params.dni
     try {
 
-        def newDev = addChildDevice("oschrich", "VeSync Plug", "${dni}")
+        def newDev = addChildDevice("oschrich", "Etekcity Plug", "${dni}")
 
         //newDev.sendEvent(name: "device_id", value: null)
 
@@ -393,7 +393,10 @@ void getDevices() {
     //def data = webGet("/vold/user/devices")
     def pass = generalSetting("password")
 
-    if (pass)
+    if (!pass || !state?.accountId) {
+        log.trace "No account info"
+    }
+    else
     {
         def hash = generateMD5(generalSetting("password"))
         def body = '{"email": "' + generalSetting("username") + '","password": "' + hash + '","userType": "1","method": "devices","appVersion": "2.5.1","phoneBrand": "SM N9005","phoneOS": "Android","traceId": "1576162707","timeZone": "America/New_York","acceptLanguage": "en","accountID": "' + state.accountId + '","token": "' + state.token + '"}'
