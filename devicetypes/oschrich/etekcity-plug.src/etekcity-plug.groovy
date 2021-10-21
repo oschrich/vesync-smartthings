@@ -111,7 +111,7 @@ def doAction15A(String action) {
 
     def body = '{"timeZone": "America/New_York","acceptLanguage": "en","accountID": "' + parent.state.accountId + '","token": "' + parent.state.token + '","uuid": "' + uuid + '","status": "' + action + '"}'
 
-    jsonPut("/15a/v1/device/devicestatus")
+    jsonPut("/15a/v1/device/devicestatus", body)
 }
 
 private initialize() {
@@ -150,7 +150,7 @@ private webPut(path) {
     return parent.webPut(path)
 }
 
-private jsonPut(path, bodyMap) {
+private jsonPut(path, def bodyMap) {
 
     return parent.jsonPut(path, bodyMap)
 }
