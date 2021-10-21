@@ -35,7 +35,7 @@
 String driverVersion() { return "20201009" }
 
 metadata {
-    definition (name: "Etekcity Plug", namespace: "oschrich", author: "Chris Weber") {
+    definition (name: "Etekcity Plug", namespace: "vesync", author: "Chris Weber") {
         capability "Energy Meter"
         capability "Actuator"
         capability "Switch"
