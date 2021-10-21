@@ -146,10 +146,18 @@ def refresh() {
     initialize()
 
     def data = webGet("/v1/device/" + device.currentValue("device_id") + "/detail")
+    log.trace data
     sendEvent(name: "switch", value: data["deviceStatus"]) 
-    sendEvent(name: "energy", value: data["energy"]) 
-    sendEvent(name: "power", value: parent.convertHex(data["power"])) 
-    sendEvent(name: "voltage", value: parent.convertHex(data["voltage"])) 
+    sendEvent(name: "energy", value: data["energy"])
+    if(device.currentValue("device_type") == "ESW15-USA" ) {
+    	log.trace "Made it here"
+        sendEvent(name: "power", value: data["power"])
+        sendEvent(name: "voltage", value: data["voltage"])
+    }
+    else {
+        sendEvent(name: "power", value: parent.convertHex(data["power"])) 
+        sendEvent(name: "voltage", value: parent.convertHex(data["voltage"])) 
+    }
     String interval = "601"
     if (!device.currentValue("checkInterval") || device.currentValue("checkInterval") != interval) {
         sendEvent(name: "checkInterval", value: interval, displayed: true) 
