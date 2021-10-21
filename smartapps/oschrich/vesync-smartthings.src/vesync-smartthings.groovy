@@ -391,24 +391,29 @@ void getDevices() {
     def deviceList = []
 
     //def data = webGet("/vold/user/devices")
-    def hash = generateMD5(generalSetting("password"))
-    def body = '{"email": "' + generalSetting("username") + '","password": "' + hash + '","userType": "1","method": "devices","appVersion": "2.5.1","phoneBrand": "SM N9005","phoneOS": "Android","traceId": "1576162707","timeZone": "America/New_York","acceptLanguage": "en","accountID": "' + state.accountId + '","token": "' + state.token + '"}'
-    def data = jsonPost("/cloud/v1/deviceManaged/devices", body)
+    def pass = generalSetting("password")
 
-    data.result.list.each {
-        log.trace it["deviceName"]
+    if (pass)
+    {
+        def hash = generateMD5(generalSetting("password"))
+        def body = '{"email": "' + generalSetting("username") + '","password": "' + hash + '","userType": "1","method": "devices","appVersion": "2.5.1","phoneBrand": "SM N9005","phoneOS": "Android","traceId": "1576162707","timeZone": "America/New_York","acceptLanguage": "en","accountID": "' + state.accountId + '","token": "' + state.token + '"}'
+        def data = jsonPost("/cloud/v1/deviceManaged/devices", body)
 
-        def name = it["deviceName"]
-        def cid = it["cid"]
-        def type = it["deviceType"]
-        def model = it["model"]
-        def dni = "vesync-connect-${name}"
+        data.result.list.each {
+            log.trace it["deviceName"]
 
-        def dev = [name: name, cid: cid, type: type, model: model, dni: dni]
-        deviceList.push(dev)
+            def name = it["deviceName"]
+            def cid = it["cid"]
+            def type = it["deviceType"]
+            def model = it["model"]
+            def dni = "vesync-connect-${name}"
+
+            def dev = [name: name, cid: cid, type: type, model: model, dni: dni]
+            deviceList.push(dev)
+        }
+
+        state.deviceList = deviceList
     }
-
-    state.deviceList = deviceList
 
 }
 
