@@ -152,7 +152,7 @@ private webPut(path) {
 
 private jsonPut(path, def bodyMap) {
 
-    return parent.jsonPut(path, bodyMap)
+    return parent.jsonPost(path, bodyMap)
 }
 
 
